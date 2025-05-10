@@ -1,4 +1,4 @@
-# Mobs
+# VanillaMobs
 <b>Mob Plugin For PocketMine-MP Version 5<b>
 <br />
 <br />
@@ -9,7 +9,6 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 <br />
 * This is really barebones right now
 * Mobs have no real behavior yet other than moving around
-* No drops, no XP
 * Zombies and other hostile mobs will attack you depending on game mode
 * A few hostile mobs will attack each other
 * Not many config options yet but there are a few
@@ -17,11 +16,12 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 * You can do /listmobs to list all spawned mobs
 * You can do /summon Mob [quantity] to summon mobs to your location
 <br />
-<a href="https://poggit.pmmp.io/p/Mobs"><img src="https://poggit.pmmp.io/shield.state/Mobs"></a>
 
-## Goes To Update Feature 3.5.0
-- Add Mob AI Vanilla
-- Full Mobs And New Mobs 1.21.80
-- Rare Mobs And Other Jockey Mobs
-- Support XpDrop ItemDrop
-- Vanilla Golem Builder (IronGolem,SnowGolem,WitherGolem)
+## New Feature
+[X] Updated Some Mobs Like Vanilla
+[X] Added New Mobs Total All Mobs 73+
+[X] Rare Mobs And Mob Jockeys
+[X] Support Drops Xp And Item
+[] Can Ride A Horse Or Ride A Horse
+[] Adding Can Use Shears Like In Vanilla
+[] Can Make Golem From Blocks Like In Vanilla (Snow, Iron, Wither)
