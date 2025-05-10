@@ -1,0 +1,22 @@
+# whether mobs spawn at all
+spawnmobs: true
+# write spawn/despawn messages to the console
+# this is noisy and mostly for debugging
+spawnmsgs: false
+# show name tags and health percent if percent is less than 100
+damagetags: true
+# regain this much health over time when idle
+# setting to 0 disables
+regainhealth: 1
+# mobs will not spawn in any worldname containing one of these strings
+nospawn:
+- arena
+- lobby
+# quantity of mobs to spawn of each type (higher numbers will use a lot more system resources)
+# 3 mobs spawn by default per type, add a mob below to change the spawn quantity, use 0 for none
+# available mobs are:
+# Bat Blaze Cat CaveSpider Chicken Cod Cow Creeper Dolphin Donkey ElderGuardian Enderman Ghast
+# Guardian Horse Husk IronGolem Llama MagmaCube Mooshroom Ocelot Parrot Phantom Pig PolarBear
+# PufferFish Rabbit Salmon Sheep Silverfish Skeleton SkeletonHorse Slime Spider Squid Stray
+# TropicalFish Villager Witch Wolf Zombie ZombieVillager
+Bat: 3
