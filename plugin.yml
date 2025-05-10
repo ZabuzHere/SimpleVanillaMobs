@@ -1,0 +1,22 @@
+name: Mobs
+version: 2.4.0
+main: tgwaste\Mobs\Main
+api: 5.0.0
+author: [tgwaste, VsrStudio, ZabuzHere]
+commands:
+  killmobs:
+    usage: "/killmobs"
+    description: "Kill all Mobs"
+    permission: mobs.operator
+  listmobs:
+    usage: "/listmobs"
+    description: "List all Mobs"
+    permission: mobs.operator
+  summon:
+    usage: "/summon <type> [quantity]"
+    description: "Summon a Mob"
+    permission: mobs.operator
+permissions:
+  mobs.operator:
+    description: allow using mob commands
+    default: op
