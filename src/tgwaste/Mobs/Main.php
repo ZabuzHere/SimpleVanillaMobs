@@ -48,6 +48,10 @@ class Main extends PluginBase implements Listener {
 		(new Registrations)->registerEntities();
 	}
 
+	public static function getInstance(): self {
+		return self::$instance;
+	}
+
 	public function onCommand(CommandSender $sender, Command $command, string $label, array $args) : bool {
 		if ($sender instanceof Player and !$sender->hasPermission(DefaultPermissions::ROOT_OPERATOR)) {
 			$sender->sendMessage("§cYou do not have permission to use mob commands§r");
