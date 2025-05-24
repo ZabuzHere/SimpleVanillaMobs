@@ -65,7 +65,7 @@ class VillagerV2 extends MobsEntity {
 
             [0, 1, 1, VanillaBlocks::AIR()],
             [0, 2, 1, VanillaBlocks::AIR()],
-            [0, 1, 1, VanillaBlocks::OAK_DOOR()->setDoorType(0)],
+            [0, 1, 1, VanillaBlocks::ACACIA_DOOR()],
 
             [0, 2, 0, VanillaBlocks::OAK_PLANKS()],
             [1, 2, 0, VanillaBlocks::OAK_PLANKS()],
