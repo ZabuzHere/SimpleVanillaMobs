@@ -108,24 +108,24 @@ class Bee extends MobsEntity {
 			VanillaBlocks::OXEYE_DAISY()->getTypeId()
 		]);
 	}
-  
-  private function tryCreateHive(): void {
-    $radius = 5;
-    $pos = $this->getPosition();
-    for ($x = -$radius; $x <= $radius; $x++) {
-        for ($y = -2; $y <= 2; $y++) {
-            for ($z = -$radius; $z <= $radius; $z++) {
-                $checkPos = $pos->add($x, $y, $z);
-                $block = $this->getWorld()->getBlock($checkPos);
-                if ($block->getTypeId() === VanillaBlocks::OAK_LOG()->getTypeId()) {
-                    $above = $checkPos->add(0, 1, 0);
-                    if ($this->getWorld()->getBlock($above)->getTypeId() === VanillaBlocks::AIR()->getTypeId()) {
-                        $this->getWorld()->setBlock($above, VanillaBlocks::BEE_NEST());
-                        $this->hivePos = $above;
-                        return;
-                    }
-                }
-            }
-        }
-    }
+	private function tryCreateHive(): void {
+		$radius = 5;
+		$pos = $this->getPosition();
+		for ($x = -$radius; $x <= $radius; $x++) {
+			for ($y = -2; $y <= 2; $y++) {
+				for ($z = -$radius; $z <= $radius; $z++) {
+					$checkPos = $pos->add($x, $y, $z);
+					$block = $this->getWorld()->getBlock($checkPos);
+					if ($block->getTypeId() === VanillaBlocks::OAK_LOG()->getTypeId()) {
+						$above = $checkPos->add(0, 1, 0);
+						if ($this->getWorld()->getBlock($above)->getTypeId() === VanillaBlocks::AIR()->getTypeId()) {
+							$this->getWorld()->setBlock($above, VanillaBlocks::BEE_NEST());
+							$this->hivePos = $above;
+							return;
+						}
+					}
+				}
+			}
+		}
+	}
 }
