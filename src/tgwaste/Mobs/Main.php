@@ -38,6 +38,7 @@ class Main extends PluginBase implements Listener {
 		$this->saveDefaultConfig();
 		$this->getScheduler()->scheduleRepeatingTask(new Schedule(), 200);
 		$this->getServer()->getPluginManager()->registerEvents(new Listen(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
 		$this->nospawn = $this->getConfig()->get("nospawn");
