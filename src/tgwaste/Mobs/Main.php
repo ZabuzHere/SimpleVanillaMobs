@@ -10,6 +10,7 @@ use pocketmine\event\Listener;
 use pocketmine\permission\DefaultPermissions;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
+use tgwaste\Mobs\event\ItemInteractListener;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
@@ -39,6 +40,7 @@ class Main extends PluginBase implements Listener {
 		$this->getScheduler()->scheduleRepeatingTask(new Schedule(), 200);
 		$this->getServer()->getPluginManager()->registerEvents(new Listen(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new ItemInteractListener(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
 		$this->nospawn = $this->getConfig()->get("nospawn");
