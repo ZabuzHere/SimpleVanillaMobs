@@ -22,6 +22,10 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 - [X] Added New Mobs Total All Mobs 73+
 - [X] Rare Mobs And Mob Jockeys
 - [X] Support Drops Xp And Item
-- [ ] Can Ride A Horse Or Ride A Horse
+- [ ] Can Ride A Horse
 - [ ] Adding Can Use Shears Like In Vanilla
 - [ ] Can Make Golem From Blocks Like In Vanilla (Snow, Iron, Wither)
+
+### Credits
+[@tgwaste](https://github.com/tgwaste)
+[@VsrStudio](https://github.com/VsrStudio)
