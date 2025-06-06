@@ -41,6 +41,7 @@ class Main extends PluginBase implements Listener {
 		$this->getServer()->getPluginManager()->registerEvents(new Listen(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new ItemInteractListener(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new FeedListener(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
 		$this->nospawn = $this->getConfig()->get("nospawn");
