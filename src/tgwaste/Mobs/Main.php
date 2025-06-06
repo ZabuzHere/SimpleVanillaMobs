@@ -11,6 +11,7 @@ use pocketmine\permission\DefaultPermissions;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use tgwaste\Mobs\event\ItemInteractListener;
+use tgwaste\Mobs\Listener\FeedListener;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
