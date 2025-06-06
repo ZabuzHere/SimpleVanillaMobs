@@ -9,11 +9,15 @@ use pocketmine\entity\Entity;
 use pocketmine\entity\EntitySizeInfo;  
 use pocketmine\entity\Living;  
 use pocketmine\math\Vector3;  
-use pocketmine\nbt\tag\CompoundTag;  
+use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\item\ItemIds;
+use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 use pocketmine\item\StringToItemParser;
 use pocketmine\item\LegacyStringToItemParser;
-use pocketmine\network\mcpe\protocol\types\entity\EntityIds;  
+use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
+use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
+use pocketmine\network\mcpe\protocol\types\entity\EntityLink;
 use tgwaste\Mobs\Attributes;  
 use tgwaste\Mobs\Main;  
 use tgwaste\Mobs\Motion;  
@@ -25,7 +29,8 @@ class MobsEntity extends Living {
 	public $attackdelay;  
 	public $defaultlook;  
 	public $destination;  
-	public $timer;  
+	public $timer;
+	protected ?Player $leashedTo = null;
   
 	public static function getNetworkTypeId() : string {  
 		return static::TYPE_ID;  
@@ -170,6 +175,62 @@ class MobsEntity extends Living {
 	}  
   
 	public function fall(float $fallDistance) : void {
+	}
+
+	public function onInteract(Player $player, Item $item): bool {
+		if ($item->getId() === ItemIds::LEAD) {
+			$this->setLeashHolder($player);
+			return true;
+		}
+		return parent::onInteract($player, $item);
+	}
+	
+	public function setLeashHolder(?Player $player): void {
+		$this->leashedTo = $player;
+
+		if ($player !== null) {
+			$link = new EntityLink(
+				$player->getId(),
+				$this->getId(),
+				EntityLink::TYPE_LEASH,
+				true,
+				true
+			);
+
+			$pk = new SetActorLinkPacket();
+			$pk->link = $link;
+
+			foreach ($this->getViewers() as $viewer) {
+				$viewer->getNetworkSession()->sendDataPacket(clone $pk);
+			}
+		} else {
+			$unlink = new EntityLink(
+				0,
+				$this->getId(),
+				EntityLink::TYPE_REMOVE,
+				false,
+				true
+			);
+			$pk = new SetActorLinkPacket();
+			$pk->link = $unlink;
+
+			foreach ($this->getViewers() as $viewer) {
+				$viewer->getNetworkSession()->sendDataPacket(clone $pk);
+			}
+		}
+	}
+
+	public function getLeashHolder(): ?Player {
+		return $this->leashedTo;
+	}
+
+	public function onUpdate(int $currentTick): bool {
+		if ($this->leashedTo !== null && !$this->leashedTo->isClosed()) {
+			$targetPos = $this->leashedTo->getPosition();
+			$this->setMotion($targetPos->subtractVector($this->getPosition())->multiply(0.1));
+		}
+
+		return parent::onUpdate($currentTick);
 	}
   
 	public function getDrops(): array {
