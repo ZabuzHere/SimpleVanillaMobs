@@ -90,12 +90,10 @@ class GolemBuilder implements Listener {
     $y = $pos->getY();
     $z = $pos->getZ();
 
-    // Cek bagian kepala (3 skulls)
     $skull1 = $world->getBlockAt($x - 1, $y - 1, $z);
     $skull2 = $world->getBlockAt($x, $y - 1, $z);
     $skull3 = $world->getBlockAt($x + 1, $y - 1, $z);
 
-    // Cek bagian badan (soul sand T)
     $base = $world->getBlockAt($x, $y - 2, $z);
     $arm1 = $world->getBlockAt($x - 1, $y - 2, $z);
     $arm2 = $world->getBlockAt($x + 1, $y - 2, $z);
@@ -160,4 +158,5 @@ class GolemBuilder implements Listener {
             $world->setBlockAt($x, $y - 3, $z, VanillaBlocks::AIR());
             break;
     }
+}
 }
