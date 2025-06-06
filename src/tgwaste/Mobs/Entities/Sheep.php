@@ -18,3 +18,4 @@ public function isSheared(): bool {
 public function setSheared(bool $sheared): void {
     $this->sheared = $sheared;
 }
+}
