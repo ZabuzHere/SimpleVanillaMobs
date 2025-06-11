@@ -8,6 +8,7 @@ use pocketmine\item\VanillaItems;
 use pocketmine\block\VanillaBlocks;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\block\Block;
+use pocketmine\block\utils\DyeColor;
 use pocketmine\world\sound\ShearSound;
 use tgwaste\Mobs\Entities\Sheep;
 
@@ -21,7 +22,7 @@ class ItemInteractListener implements Listener {
         if ($item->equals(VanillaItems::SHEARS()) && $entity instanceof Sheep) {
             if (!$entity->isSheared()) {
                 $entity->setSheared(true);
-                $player->getWorld()->dropItem($entity->getPosition(), VanillaItems::WHITE_WOOL());
+                $player->getWorld()->dropItem($entity->getPosition(), VanillaBlock::WOOL()->setColor(DyeColor::WHITE());
                 $player->getWorld()->addSound($entity->getPosition(), new ShearSound());
                 $item->applyDamage(1);
             }
@@ -32,8 +33,9 @@ class ItemInteractListener implements Listener {
         $block = $event->getBlock();
         $player = $event->getPlayer();
         $item = $player->getInventory()->getItemInHand();
-      
-        if ($block->getTypeId() === VanillaBlocks::BEE_NEST()->getTypeId() && $item->equals(VanillaItems::SHEARS())) {
+        
+        // VanillaBlock::BEE_NEST()
+        if ($block->getTypeId() === VanillaBlocks::HONEYCOMB()->getTypeId() && $item->equals(VanillaItems::SHEARS())) {
             $player->getWorld()->dropItem($block->getPosition(), VanillaItems::HONEYCOMB(), 3);
             $player->getWorld()->addSound($block->getPosition(), new ShearSound());
             $item->applyDamage(1);
