@@ -18,6 +18,7 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 <br />
 
 ## New Feature
+- [ ] All Mob Hit Sound
 - [X] Updated Some Mobs Like Vanilla
 - [X] Added New Mobs Total All Mobs 73+
 - [X] Rare Mobs And Mob Jockeys
