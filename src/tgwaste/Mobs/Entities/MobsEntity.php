@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace tgwaste\Mobs\Entities;  
   
 use pocketmine\data\bedrock\LegacyEntityIdToStringIdMap;  
-use pocketmine\entity\Entity;  
+use pocketmine\entity\Entity;
+use pocketmine\player\Player;
 use pocketmine\entity\EntitySizeInfo;  
 use pocketmine\entity\Living;  
 use pocketmine\math\Vector3;  
