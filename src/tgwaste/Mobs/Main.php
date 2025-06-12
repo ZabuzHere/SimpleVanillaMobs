@@ -12,6 +12,7 @@ use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use tgwaste\Mobs\event\ItemInteractListener;
 use tgwaste\Mobs\Listener\FeedListener;
+use tgwaste\Mobs\API\SoundAPI;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
@@ -43,6 +44,7 @@ class Main extends PluginBase implements Listener {
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new ItemInteractListener(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new FeedListener(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new SoundAPI(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
 		$this->nospawn = $this->getConfig()->get("nospawn");
