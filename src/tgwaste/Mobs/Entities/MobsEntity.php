@@ -178,12 +178,30 @@ class MobsEntity extends Living {
 	public function fall(float $fallDistance) : void {
 	}
 
-	public function onInteract(Player $player, Item $item): bool {
+	// public function onInteract(Player $player, Item $item): bool {
+		// if ($item->getId() === ItemIds::LEAD) {
+			// $this->setLeashHolder($player);
+			// return true;
+		// }
+		// return parent::onInteract($player, $item);
+	// }
+
+	public function onInteract(Player $player, Vector3 $clickPos): bool {
+		$item = $player->getInventory()->getItemInHand();
+
 		if ($item->getId() === ItemIds::LEAD) {
-			$this->setLeashHolder($player);
-			return true;
+			if ($this->leashedTo !== null && $this->leashedTo->getName() === $player->getName() && $player->isSneaking()) {
+				$this->setLeashHolder(null);
+				return true;
+			}
+
+			if ($this->leashedTo === null && $this->canBeLeashedBy($player)) {
+				$this->setLeashHolder($player);
+				return true;
+			}
 		}
-		return parent::onInteract($player, $item);
+
+		return parent::onInteract($player, $clickPos);
 	}
 	
 	public function setLeashHolder(?Player $player): void {
