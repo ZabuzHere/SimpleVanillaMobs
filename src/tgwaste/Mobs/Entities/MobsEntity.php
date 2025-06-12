@@ -11,7 +11,8 @@ use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\Living;  
 use pocketmine\math\Vector3;  
 use pocketmine\nbt\tag\CompoundTag;
-use pocketmine\item\ItemIds;
+// use pocketmine\item\ItemIds;
+use pocketmine\item\ItemTypeIds;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
 use pocketmine\item\StringToItemParser;
@@ -110,7 +111,7 @@ class MobsEntity extends Living {
 		$percent = (int)(($health * 100.0) / $maxhealth);  
   
 		if ($damagetags && $percent < 100) {  
-			$this->setNameTag("$name  $percent §r");  
+			$this->setNameTag("§c$name  $percent §r");  
 		} else {  
 			$damagetags = false;  
 			$this->setNameTag($this->getName());  
@@ -189,7 +190,7 @@ class MobsEntity extends Living {
 	public function onInteract(Player $player, Vector3 $clickPos): bool {
 		$item = $player->getInventory()->getItemInHand();
 
-		if ($item->getId() === ItemIds::LEAD) {
+		if ($item->getTypeId() === ItemTypeIds::LEAD) {
 			if ($this->leashedTo !== null && $this->leashedTo->getName() === $player->getName() && $player->isSneaking()) {
 				$this->setLeashHolder(null);
 				return true;
