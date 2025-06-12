@@ -22,8 +22,10 @@ class ItemInteractListener implements Listener {
         if ($item->equals(VanillaItems::SHEARS()) && $entity instanceof Sheep) {
             if (!$entity->isSheared()) {
                 $entity->setSheared(true);
-                $player->getWorld()->dropItem($entity->getPosition(), VanillaBlock::WOOL()->setColor(DyeColor::WHITE()));
-                $player->getWorld()->addSound($entity->getPosition(), new ShearSound());
+               // $player->getWorld()->dropItem($entity->getPosition(), VanillaBlock::WOOL()->setColor(DyeColor::WHITE()));
+               // $player->getWorld()->addSound($entity->getPosition(), new ShearSound());
+                $woolBlock = VanillaBlock::WOOL()->setColor(DyeColor::WHITE());
+                $player->getWorld()->dropItem($entity->getPosition(), $woolBlock->asItem());
                 $item->applyDamage(1);
             }
         }
