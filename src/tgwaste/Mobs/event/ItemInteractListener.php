@@ -24,7 +24,7 @@ class ItemInteractListener implements Listener {
                 $entity->setSheared(true);
                // $player->getWorld()->dropItem($entity->getPosition(), VanillaBlock::WOOL()->setColor(DyeColor::WHITE()));
                // $player->getWorld()->addSound($entity->getPosition(), new ShearSound());
-                $woolBlock = VanillaBlock::WOOL()->setColor(DyeColor::WHITE());
+                $woolBlock = VanillaBlocks::WOOL()->setColor(DyeColor::WHITE());
                 $player->getWorld()->dropItem($entity->getPosition(), $woolBlock->asItem());
                 $item->applyDamage(1);
             }
