@@ -10,7 +10,7 @@ use pocketmine\plugin\PluginBase;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\network\mcpe\protocol\StopSoundPacket;
 
-class SoundAPI extends PluginBase implements Listener {
+class SoundAPI implements Listener {
 
 	protected string $soundName;
 	protected float $x, $y, $z, $volume, $pitch;
