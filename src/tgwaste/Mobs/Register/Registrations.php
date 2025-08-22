@@ -2,13 +2,28 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Register;
 
-use pocketmine\data\bedrock\LegacyEntityIdToStringIdMap;
+use tgwaste\Mobs\Main;
+use pocketmine\data\bedrock\block\BlockTypeNames;
+use pocketmine\data\bedrock\item\ItemTypeNames;
+use pocketmine\data\bedrock\item\SavedItemData;
+use pocketmine\entity\Entity;
 use pocketmine\entity\EntityDataHelper;
 use pocketmine\entity\EntityFactory;
+use pocketmine\entity\Living;
+use pocketmine\entity\Location;
+use pocketmine\inventory\CreativeInventory;
+use pocketmine\item\ItemIdentifier;
+use pocketmine\item\ItemTypeIds;
+use pocketmine\item\SpawnEgg;
+use pocketmine\item\StringToItemParser;
+use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\utils\CloningRegistryTrait;
 use pocketmine\world\World;
+use pocketmine\world\format\io\GlobalItemDataHandlers;
+use pocketmine\data\bedrock\LegacyEntityIdToStringIdMap;
 use tgwaste\Mobs\Entities\Bat;
 use tgwaste\Mobs\Entities\Blaze;
 use tgwaste\Mobs\Entities\Cat;
@@ -77,7 +92,6 @@ use tgwaste\Mobs\Entities\Axolotl;
 use tgwaste\Mobs\Entities\SnowGolem;
 use tgwaste\Mobs\Entities\EnderDragon;
 use tgwaste\Mobs\Entities\GlowSquid;
-use tgwaste\Mobs\Entities\VillagerV2;
 use tgwaste\Mobs\Entities\Fox;
 use tgwaste\Mobs\Entities\Frog;
 use tgwaste\Mobs\Entities\Bee;
@@ -94,7 +108,48 @@ class Registrations {
 					return new $typeClass(EntityDataHelper::parseLocation($nbt, $world), $nbt);
 				},
 			[$entityName]);
-		}
+
+            $this->registerSpawnEgg($entityName, $typeClass);
+        }
+        CustomItems::register();
+    }
+    
+    private function registerSpawnEgg(string $entityName, string $class) : void {
+    $idConst = strtoupper($entityName) . "_SPAWN_EGG";
+    if(!defined(ItemTypeNames::class . "::" . $idConst)){
+        return;
+    }
+
+    $idName = constant(ItemTypeNames::class . "::" . $idConst);
+
+        $egg = new class(new ItemIdentifier(ItemTypeIds::newId()), $entityName . " Spawn Egg", $class) extends SpawnEgg {
+
+        private string $entityClass;
+
+        public function __construct(ItemIdentifier $id, string $name, string $entityClass) {
+            parent::__construct($id, $name);
+            $this->entityClass = $entityClass;
+        }
+
+        public function createEntity(World $world, Vector3 $pos, float $yaw, float $pitch): Entity {
+            $class = $this->entityClass;
+            return new $class(Location::fromObject($pos, $world, $yaw, $pitch));
+        }
+    };
+
+    $itemDeserializer = GlobalItemDataHandlers::getDeserializer();
+    $itemSerializer = GlobalItemDataHandlers::getSerializer();
+    $stringToItemParser = StringToItemParser::getInstance();
+    $creativeInventory = CreativeInventory::getInstance();
+
+    $itemDeserializer->map($idName, static fn() => clone $egg);
+    $itemSerializer->map($egg, static fn() => new SavedItemData($idName));
+
+    try {
+        $stringToItemParser->register($idName, static fn() => clone $egg);
+    } catch (\InvalidArgumentException $e) {}
+
+    $creativeInventory->add($egg);
 	}
 
 	public function getClasses() : array {
@@ -133,13 +188,13 @@ class Registrations {
 			"SkeletonHorse" => SkeletonHorse::class,
 			"Slime" => Slime::class,
 			"Spider" => Spider::class,
-			"Squid" => Squid::class,
+            "Squid" => Squid::class,
 			"Stray" => Stray::class,
 			"TropicalFish" => TropicalFish::class,
-			"Villager" => Villager::class,
+            "Villager" => Villager::class,
 			"Witch" => Witch::class,
 			"Wolf" => Wolf::class,
-			"Zombie" => Zombie::class,
+            "Zombie" => Zombie::class,
 			"Allay" => Allay::class,
 			"Armadillo" => Armadillo::class,
 			"Bogged" => Bogged::class,
@@ -161,7 +216,7 @@ class Registrations {
 			"Vex" => Vex::class,
 			"Vindicator" => Vindicator::class,
 			"Zoglin" => Zoglin::class,
-			"ZombieVillager" => ZombieVillager::class,
+			"Zombie_Villager" => ZombieVillager::class,
 			"Axolotl" => Axolotl::class,
 			"SnowGolem" => SnowGolem::class,
 			"EnderDragon" => EnderDragon::class,
@@ -169,7 +224,7 @@ class Registrations {
 			"Fox" => Fox::class,
 			"Frog" => Frog::class,
 			"Bee" => Bee::class,
-			"VillagerV2" => VillagerV2::class
+            "Happy_Ghast" => HappyGhast::class
 		];
 	}
 }
