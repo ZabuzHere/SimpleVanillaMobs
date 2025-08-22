@@ -1,6 +1,6 @@
 <?php
 
-namespace tgwaste\Mobs\event;
+namespace tgwaste\Mobs\Listener;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerEntityInteractEvent;
