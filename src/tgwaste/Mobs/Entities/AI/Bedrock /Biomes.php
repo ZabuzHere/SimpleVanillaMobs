@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI\Bedrock;
 
 use pocketmine\data\bedrock\BiomeIds;
 use pocketmine\player\Player;
+use tgwaste\Mobs\Main;
 
 class Biomes {
 	public function getMobsForBiome(string $biome) {
