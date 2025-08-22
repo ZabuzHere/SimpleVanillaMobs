@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
+use tgwaste\Mobs\Main;
 use tgwaste\Mobs\Entities\MobsEntity;
 
 class Motion {
