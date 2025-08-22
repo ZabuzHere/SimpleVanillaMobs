@@ -10,9 +10,20 @@ use pocketmine\event\Listener;
 use pocketmine\permission\DefaultPermissions;
 use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
-use tgwaste\Mobs\event\ItemInteractListener;
-use tgwaste\Mobs\Listener\FeedListener;
 use tgwaste\Mobs\API\SoundAPI;
+use tgwaste\Mobs\Register\Registrations;
+use tgwaste\Mobs\Listener\ItemInteractListener;
+use tgwaste\Mobs\Listener\FeedListener;
+use tgwaste\Mobs\Listener\HorseListener;
+use tgwaste\Mobs\Entities\AI\Bedrock\Controller\HorseController;
+use tgwaste\Mobs\Entities\AI\Coords;
+use tgwaste\Mobs\Entities\AI\Motion;
+use tgwaste\Mobs\Entities\AI\Spawn;
+use tgwaste\Mobs\Entities\AI\Bedrock\Biomes;
+use tgwaste\Mobs\Entities\AI\Bedrock\Listen;
+use tgwaste\Mobs\Entities\AI\Bedrock\GolemBuilder;
+use tgwaste\Mobs\Entities\AI\Bedrock\Schedule;
+use tgwaste\Mobs\Entities\AI\Bedrock\Attributes;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
@@ -44,6 +55,8 @@ class Main extends PluginBase implements Listener {
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new ItemInteractListener(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new FeedListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new HorseListener(), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new HorseController(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new SoundAPI(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
