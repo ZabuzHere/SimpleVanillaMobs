@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI\Bedrock;
 
 use pocketmine\entity\Entity;
 use pocketmine\event\Listener;
@@ -11,6 +11,7 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDespawnEvent;
 use pocketmine\event\entity\EntitySpawnEvent;
 use pocketmine\player\Player;
+use tgwaste\Mobs\Main;
 
 class Listen implements Listener {
 	public function onEntityDamageByEntityEvent(EntityDamageByEntityEvent $event) {
