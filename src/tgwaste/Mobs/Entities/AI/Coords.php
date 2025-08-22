@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI;
 
 use pocketmine\block\Water;
 use pocketmine\math\Vector3;
 use pocketmine\world\World;
 use pocketmine\player\Player;
+use tgwaste\Mobs\Main;
 use tgwaste\Mobs\Entities\MobsEntity;
 
 class Coords {
