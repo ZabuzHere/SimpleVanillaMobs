@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs\API\SoundAPI;
+namespace tgwaste\Mobs\API;
 
 use pocketmine\player\Player;
 use pocketmine\event\Listener;

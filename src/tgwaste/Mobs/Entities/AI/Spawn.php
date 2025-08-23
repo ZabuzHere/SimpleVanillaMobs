@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI;
 
 use pocketmine\block\Water;
 use pocketmine\entity\Location;
 use pocketmine\math\Vector3;
 use pocketmine\player\Player;
 use pocketmine\world\World;
+use tgwaste\Mobs\Main;
 use tgwaste\Mobs\Entities\MobsEntity;
 
 class Spawn {

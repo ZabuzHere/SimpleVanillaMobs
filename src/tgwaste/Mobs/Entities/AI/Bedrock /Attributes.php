@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-namespace tgwaste\Mobs;
+namespace tgwaste\Mobs\Entities\AI\Bedrock;
+
+use tgwaste\Mobs\Main;
 
 class Attributes {
 	public function isFlying(string $name) : bool {
