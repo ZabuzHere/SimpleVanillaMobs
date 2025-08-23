@@ -95,7 +95,7 @@ use tgwaste\Mobs\Entities\GlowSquid;
 use tgwaste\Mobs\Entities\Fox;
 use tgwaste\Mobs\Entities\Frog;
 use tgwaste\Mobs\Entities\Bee;
-use tgwaste\Mobs\Entities\SwiftnesGolem;
+use tgwaste\Mobs\Entities\Wither;
 use tgwaste\Mobs\Entities\HappyGhast;
 
 class Registrations {
@@ -224,7 +224,8 @@ class Registrations {
 			"Fox" => Fox::class,
 			"Frog" => Frog::class,
 			"Bee" => Bee::class,
-            "Happy_Ghast" => HappyGhast::class
+            "Happy_Ghast" => HappyGhast::class,
+			"Wither" => Wither::class
 		];
 	}
 }
