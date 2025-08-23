@@ -19,7 +19,6 @@ class GolemBuilder implements Listener {
         foreach($event->getTransaction()->getBlocks() as [$x, $y, $z, $block]){
         $position = $block->getPosition();
         $world = $position->getWorld();
-            //}
         // Iron Golem
         if (
             $block->getTypeId() === VanillaBlocks::LIT_PUMPKIN()->getTypeId() ||
@@ -67,7 +66,7 @@ class GolemBuilder implements Listener {
 
         return (
             $center->getTypeId() === VanillaBlocks::IRON()->getTypeId() &&
-            $arm1->getTypeId() === VanillaBlocks::IRON_()->getTypeId() &&
+            $arm1->getTypeId() === VanillaBlocks::IRON()->getTypeId() &&
             $arm2->getTypeId() === VanillaBlocks::IRON()->getTypeId() &&
             $base->getTypeId() === VanillaBlocks::IRON()->getTypeId()
         );
@@ -105,10 +104,12 @@ class GolemBuilder implements Listener {
         $arm2 = $world->getBlockAt($x + 1, $y - 1, $z);
         $bottom = $world->getBlockAt($x, $y - 2, $z);
 
+        $witherHead = VanillaBlocks::MOB_HEAD()->setMobHeadType(MobHeadType::WITHER_SKELETON());
+        
         return (
-            $skull1->getTypeId() === VanillaBlocks::WITHER_SKELETON_SKULL()->getTypeId() &&
-            $skull2->getTypeId() === VanillaBlocks::WITHER_SKELETON_SKULL()->getTypeId() &&
-            $skull3->getTypeId() === VanillaBlocks::WITHER_SKELETON_SKULL()->getTypeId() &&
+            $skull1->getTypeId() === $witherHead->getTypeId() &&    
+            $skull2->getTypeId() === $witherHead->getTypeId() &&      
+            $skull3->getTypeId() === $witherHead->getTypeId() &&
             $base->getTypeId() === VanillaBlocks::SOUL_SAND()->getTypeId() &&
             $arm1->getTypeId() === VanillaBlocks::SOUL_SAND()->getTypeId() &&
             $arm2->getTypeId() === VanillaBlocks::SOUL_SAND()->getTypeId() &&
@@ -151,7 +152,15 @@ class GolemBuilder implements Listener {
 
         switch ($type) {
             case 'iron':
-                $world->setBlockAt($x, $y, $z, VanillaBlocks::AIR()); // pumpkin
+                $pumpkinBlocks = [ 
+                    $world->getBlockAt($x, $y, $z),     
+                ];      
+                foreach ($pumpkinBlocks as $block) {         
+                    if ($block->getTypeId() === VanillaBlocks::CARVED_PUMPKIN()->getTypeId() ||          
+                        $block->getTypeId() === VanillaBlocks::LIT_PUMPKIN()->getTypeId()) {              
+                        $world->setBlockAt($block->getPosition()->getX(), $block->getPosition()->getY(), $block->getPosition()->getZ(), VanillaBlocks::AIR());               
+                    }       
+                }
                 $world->setBlockAt($x, $y - 1, $z, VanillaBlocks::AIR());
                 $world->setBlockAt($x - 1, $y - 1, $z, VanillaBlocks::AIR());
                 $world->setBlockAt($x + 1, $y - 1, $z, VanillaBlocks::AIR());
@@ -159,15 +168,34 @@ class GolemBuilder implements Listener {
                 break;
 
             case 'snow':
-                $world->setBlockAt($x, $y, $z, VanillaBlocks::AIR()); // pumpkin
+                $pumpkinBlocks = [ 
+                    $world->getBlockAt($x, $y, $z),     
+                ];      
+                foreach ($pumpkinBlocks as $block) {         
+                    if ($block->getTypeId() === VanillaBlocks::CARVED_PUMPKIN()->getTypeId() ||          
+                        $block->getTypeId() === VanillaBlocks::LIT_PUMPKIN()->getTypeId()) {              
+                        $world->setBlockAt($block->getPosition()->getX(), $block->getPosition()->getY(), $block->getPosition()->getZ(), VanillaBlocks::AIR());               
+                    }       
+                }
                 $world->setBlockAt($x, $y - 1, $z, VanillaBlocks::AIR());
                 $world->setBlockAt($x, $y - 2, $z, VanillaBlocks::AIR());
                 break;
 
             case 'wither':
-                $world->setBlockAt($x - 1, $y, $z, VanillaBlocks::AIR());
-                $world->setBlockAt($x, $y, $z, VanillaBlocks::AIR());
-                $world->setBlockAt($x + 1, $y, $z, VanillaBlocks::AIR());
+                $skullPositions = [           
+                    [$x - 1, $y, $z],     
+                    [$x, $y, $z],   
+                    [$x + 1, $y, $z] 
+                ];
+            
+                $witherHead = VanillaBlocks::MOB_HEAD()->setMobHeadType(MobHeadType::WITHER_SKELETON());
+            
+                foreach ($skullPositions as [$sx, $sy, $sz]) {
+                    $block = $world->getBlockAt($sx, $sy, $sz);           
+                    if ($block->getTypeId() === $witherHead->getTypeId() && $block->getState() === $witherHead->getState()) {
+                        $world->setBlockAt($sx, $sy, $sz, VanillaBlocks::AIR());              
+                    }
+                }
                 $world->setBlockAt($x, $y - 1, $z, VanillaBlocks::AIR());
                 $world->setBlockAt($x - 1, $y - 1, $z, VanillaBlocks::AIR());
                 $world->setBlockAt($x + 1, $y - 1, $z, VanillaBlocks::AIR());
