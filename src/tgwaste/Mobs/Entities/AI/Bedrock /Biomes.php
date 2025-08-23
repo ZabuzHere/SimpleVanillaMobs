@@ -4,58 +4,38 @@ declare(strict_types=1);
 
 namespace tgwaste\Mobs\Entities\AI\Bedrock;
 
-use pocketmine\data\bedrock\BiomeIds;
-use pocketmine\player\Player;
 use tgwaste\Mobs\Main;
 
 class Biomes {
-	public function getMobsForBiome(string $biome) {
-		$biome = strtoupper($biome);
-		$biometable = [
-			"BIRCH FOREST" => ["Cat", "Chicken", "Cow", "Horse", "Parrot", "Phantom", "Pig", "Rabbit", "Sheep"],
-			"DESERT" => ["Camel", "Cow", "Horse", "IronGolem", "Pig", "Rabbit", "Sheep"],
-			"END" => ["Enderman", "Warden", "EnderDragon"],
-			"FOREST" => ["Bat", "Cat", "Chicken", "Cow", "Horse", "Parrot", "Pig", "Rabbit", "Sheep"],
-			"HELL" => ["Blaze", "Ghast", "MagmaCube", "Mooshroom", "Piglin", "Slime"],
-			"ICE PLAINS" => ["PolarBear", "Stray", "SnowGolem"],
-			"MOUNTAINS" => ["Bat", "Cat", "Chicken", "Cow", "Horse", "Llama", "Parrot", "Pig", "Rabbit", "Sheep", "Goat"],
-			"OCEAN" => ["Cod", "Dolphin", "ElderGuardian", "PufferFish", "Salmon", "Squid", "TropicalFish"],
-			"PLAINS" => ["Cat", "Chicken", "Cow", "Donkey", "Horse", "Pig", "Rabbit", "Sheep", "Villager", "VillagerV2", "Fox", "Frog"],
-			"RIVER" => ["Cod", "PufferFish", "Salmon", "TropicalFish", "Axolotl", "GlowSquid"],
-			"SMALL MOUNTAIN" => ["Cat", "Chicken", "Cow", "Horse", "Llama", "Pig", "Rabbit", "Sheep", "Fox"],
-			"SWAMP" => ["Frog", "Slime", "Bat", "Cow", "Horse", "Pig", "Rabbit", "Sheep"],
-			"TAIGA" => ["Bat", "Cat", "Chicken", "Cow", "Horse", "Ocelot", "Pig", "Rabbit", "Sheep", "Fox"]
-		];
 
-		if (!array_key_exists($biome, $biometable)) {
-			$biome = "PLAINS";
-		}
+    private array $dayMobs;
+    private array $nightMobs;
 
-		return $biometable[$biome];
-	}
+    public function __construct() {
+        $config = Main::getInstance()->getConfig();
+        $biomes = $config->get("biomes", []);
 
-	public function getNightMobsForBiome(string $biome) {
-		$biome = strtoupper($biome);
-		$biometable = [
-			"BIRCH FOREST" => ["CaveSpider", "Creeper", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"],
-			"DESERT" => ["Creeper", "Husk", "Skeleton", "SkeletonHorse", "Spider", "Stray", "Zombie", "Creaking"],
-			"END" => ["Enderman", "Creaking", "EnderDragon"],
-			"FOREST" => ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"],
-			"HELL" => ["Blaze", "Ghast", "MagmaCube", "Warden", "Piglin"],
-			"ICE PLAINS" => ["Stray", "Zombie"],
-			"MOUNTAINS" => ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"],
-			"OCEAN" => ["Drowned", "Guardian", "ElderGuardian"],
-			"PLAINS" => ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie", "ZombieVillager"],
-			"RIVER" => ["Drowned", "GlowSquid"],
-			"SMALL MOUNTAIN" => ["CaveSpider", "Creeper", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"],
-			"SWAMP" => ["Slime", "Witch", "Zombie"],
-			"TAIGA" => ["CaveSpider", "SkeletonHorse", "Spider", "Stray", "Zombie", "Fox"]
-		];
+        $this->dayMobs = $biomes["mobs"] ?? [];
+        $this->nightMobs = $biomes["night_mobs"] ?? [];
+    }
 
-		if (!array_key_exists($biome, $biometable)) {
-			$biome = "PLAINS";
-		}
+    public function getMobsForBiome(string $biome): array {
+        $biome = strtoupper($biome);
 
-		return $biometable[$biome];
-	}
+        if (isset($this->dayMobs[$biome])) {
+            return $this->dayMobs[$biome];
+        }
+
+        return $this->dayMobs["PLAINS"] ?? ["Cow", "Sheep"];
+    }
+
+    public function getNightMobsForBiome(string $biome): array {
+        $biome = strtoupper($biome);
+
+        if (isset($this->nightMobs[$biome])) {
+            return $this->nightMobs[$biome];
+        }
+
+        return $this->nightMobs["PLAINS"] ?? ["Zombie", "Skeleton"];
+    }
 }
