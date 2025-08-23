@@ -18,7 +18,8 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 <br />
 
 ## New Feature
-- [X] All Mob Sound
+- [X] All Mobs Sound
+- [X] All Mobs Egg
 - [X] Biome Mobs Settings Config
 - [X] Updated Some Mobs Like Vanilla
 - [X] Added New Mobs Total All Mobs 73+
