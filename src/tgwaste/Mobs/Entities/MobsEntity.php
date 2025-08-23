@@ -3,7 +3,8 @@
 declare(strict_types=1);  
   
 namespace tgwaste\Mobs\Entities;  
-  
+
+use pocketmine\data\bedrock\item\ItemTypeNames;
 use pocketmine\data\bedrock\LegacyEntityIdToStringIdMap;  
 use pocketmine\entity\Entity;
 use pocketmine\player\Player;
@@ -20,9 +21,11 @@ use pocketmine\item\LegacyStringToItemParser;
 use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\entity\EntityLink;
-use tgwaste\Mobs\Attributes;  
+use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataFlags;
+use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataProperties;
+use tgwaste\Mobs\Entities\AI\Bedrock\Attributes;
 use tgwaste\Mobs\Main;  
-use tgwaste\Mobs\Motion;  
+use tgwaste\Mobs\Entities\AI\Motion;
   
 class MobsEntity extends Living {  
 	const TYPE_ID = "";  
@@ -188,70 +191,82 @@ class MobsEntity extends Living {
 	// }
 
 	public function onInteract(Player $player, Vector3 $clickPos): bool {
-		$item = $player->getInventory()->getItemInHand();
+    $item = $player->getInventory()->getItemInHand();
 
-		if ($item->getTypeId() === ItemTypeIds::LEAD) {
-			if ($this->leashedTo !== null && $this->leashedTo->getName() === $player->getName() && $player->isSneaking()) {
-				$this->setLeashHolder(null);
-				return true;
-			}
+    if ($item->getTypeId() === ItemTypeNames::LEAD) {
+        if ($this->leashedTo !== null && $this->leashedTo->getId() === $player->getId() && $player->isSneaking()) {
+            $this->setLeashHolder(null);
+            return true;
+        }
 
-			if ($this->leashedTo === null && $this->canBeLeashedBy($player)) {
-				$this->setLeashHolder($player);
-				return true;
-			}
-		}
+        if ($this->leashedTo === null) {
+            $this->setLeashHolder($player);
+            return true;
+        }
+    }
 
-		return parent::onInteract($player, $clickPos);
-	}
+    return parent::onInteract($player, $clickPos);
+    }
 	
 	public function setLeashHolder(?Player $player): void {
-		$this->leashedTo = $player;
+    $this->leashedTo = $player;
 
-		if ($player !== null) {
-			$link = new EntityLink(
-				$player->getId(),
-				$this->getId(),
-				EntityLink::TYPE_LEASH,
-				true,
-				true
-			);
+    if ($player !== null) {
+        // Tandai metadata LEASHED
+        $this->setGenericFlag(EntityMetadataFlags::LEASHED, true);
+        $this->setGenericProperty(EntityMetadataProperties::LEAD_HOLDER_EID, $player->getId());
 
-			$pk = new SetActorLinkPacket();
-			$pk->link = $link;
+        $link = new EntityLink(
+            $player->getId(),
+            $this->getId(),
+            EntityLink::TYPE_PASSENGER, // Bedrock juga menggunakan ini
+            true,
+            false,
+            0.0
+        );
 
-			foreach ($this->getViewers() as $viewer) {
-				$viewer->getNetworkSession()->sendDataPacket(clone $pk);
-			}
-		} else {
-			$unlink = new EntityLink(
-				0,
-				$this->getId(),
-				EntityLink::TYPE_REMOVE,
-				false,
-				true
-			);
-			$pk = new SetActorLinkPacket();
-			$pk->link = $unlink;
+        $pk = new SetActorLinkPacket();
+        $pk->link = $link;
 
-			foreach ($this->getViewers() as $viewer) {
-				$viewer->getNetworkSession()->sendDataPacket(clone $pk);
-			}
-		}
-	}
+        foreach ($this->getViewers() as $viewer) {
+            $viewer->getNetworkSession()->sendDataPacket(clone $pk);
+        }
+    } else {
+        // Lepas tali
+        $this->setGenericFlag(EntityMetadataFlags::LEASHED, false);
+        $this->setGenericProperty(EntityMetadataProperties::LEAD_HOLDER_EID, 0);
+
+        $unlink = new EntityLink(
+            0,
+            $this->getId(),
+            EntityLink::TYPE_REMOVE,
+            true,
+            false,
+            0.0
+        );
+
+        $pk = new SetActorLinkPacket();
+        $pk->link = $unlink;
+
+        foreach ($this->getViewers() as $viewer) {
+            $viewer->getNetworkSession()->sendDataPacket(clone $pk);
+        }
+    }
+}
 
 	public function getLeashHolder(): ?Player {
 		return $this->leashedTo;
 	}
 
-	public function onUpdate(int $currentTick): bool {
-		if ($this->leashedTo !== null && !$this->leashedTo->isClosed()) {
-			$targetPos = $this->leashedTo->getPosition();
-			$this->setMotion($targetPos->subtractVector($this->getPosition())->multiply(0.1));
-		}
+    public function onUpdate(int $currentTick): bool {
+    if ($this->leashedTo !== null && !$this->leashedTo->isClosed()) {
+        $targetPos = $this->leashedTo->getPosition();
+        $motion = $targetPos->subtractVector($this->getPosition())->multiply(0.1);
+        $this->setMotion($motion);
+    }
 
-		return parent::onUpdate($currentTick);
-	}
+    return parent::onUpdate($currentTick);
+    }
   
 	public function getDrops(): array {
 		$parser = LegacyStringToItemParser::getInstance();
