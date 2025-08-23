@@ -4,10 +4,10 @@ namespace tgwaste\Mobs\Listener;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerEntityInteractEvent;
-// use pocketmine\item\ItemIds;
 use pocketmine\item\ItemTypeIds;
 use pocketmine\world\particle\HeartParticle;
 use pocketmine\world\particle\AngryVillagerParticle;
+use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataFlags;
 use tgwaste\Mobs\Entities\Chicken;
 use tgwaste\Mobs\Entities\Wolf;
 use tgwaste\Mobs\Entities\Pig;
@@ -20,9 +20,6 @@ class FeedListener implements Listener {
         $player = $event->getPlayer();
         $item = $player->getInventory()->getItemInHand();
         $entity = $event->getEntity();
-
-        // Itemlds -> ItemTypeIds
-        // getId -> getTypeId
 
         // === Chicken ===
         if ($entity instanceof Chicken && $item->getTypeId() === ItemTypeIds::WHEAT_SEEDS) {
@@ -58,15 +55,25 @@ class FeedListener implements Listener {
     }
 
     private function tryFeed($player, $entity, $item): void {
+        $world = $entity->getWorld();
+
+        $entity->setGenericFlag(EntityMetadataFlags::EATING, true);
+
         if ($entity->getHealth() < $entity->getMaxHealth()) {
             $entity->setHealth(min($entity->getMaxHealth(), $entity->getHealth() + 4));
 
             $item->setCount($item->getCount() - 1);
             $player->getInventory()->setItemInHand($item);
 
-            $entity->getWorld()->addParticle($entity->getEyePos(), new HeartParticle());
+            $world->addParticle($entity->getEyePos(), new HeartParticle());
         } else {
-            $entity->getWorld()->addParticle($entity->getEyePos(), new AngryVillagerParticle());
+            $world->addParticle($entity->getEyePos(), new AngryVillagerParticle());
         }
+
+        $entity->getServer()->getScheduler()->scheduleDelayedTask(function() use ($entity) {
+            if ($entity->isAlive()) {
+                $entity->setGenericFlag(EntityMetadataFlags::EATING, false);
+            }
+        }, 20);
     }
 }
