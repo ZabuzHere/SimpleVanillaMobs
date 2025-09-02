@@ -20,6 +20,8 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 ## New Feature
 - [X] All Mobs Sound
 - [X] All Mobs Egg
+- [ ] Trader & Horse Inventory
+- [ ] Dried Ghast Vanilla
 - [X] Biome Mobs Settings Config
 - [X] Updated Some Mobs Like Vanilla
 - [X] Added New Mobs Total All Mobs 73+
