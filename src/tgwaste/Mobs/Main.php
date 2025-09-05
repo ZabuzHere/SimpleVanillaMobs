@@ -17,6 +17,7 @@ use tgwaste\Mobs\Listener\FeedListener;
 use tgwaste\Mobs\Listener\HorseListener;
 use tgwaste\Mobs\Entities\AI\Bedrock\Controller\HorseController;
 use tgwaste\Mobs\Entities\AI\Bedrock\Controller\GhastController;
+use tgwaste\Mobs\Entities\AI\Bedrock\Inventory\TraderInventory;
 use tgwaste\Mobs\Entities\AI\Coords;
 use tgwaste\Mobs\Entities\AI\Motion;
 use tgwaste\Mobs\Entities\AI\Spawn;
@@ -59,6 +60,7 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents(new HorseListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new HorseController(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new GhastController(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new TraderInventory(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new SoundAPI(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
