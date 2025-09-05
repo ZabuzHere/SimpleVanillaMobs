@@ -71,6 +71,11 @@ class Main extends PluginBase implements Listener {
 		$this->spawnmsgs = $this->getConfig()->get("spawnmsgs");
 
 		(new Registrations)->registerEntities();
+		CustomItems::register();
+
+		if($this->getConfig()->get("betaversion", false)){
+        CustomBlocks::register();
+		}
 	}
 
 	public static function getInstance(): self {
