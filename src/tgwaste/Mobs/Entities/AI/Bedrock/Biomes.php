@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace tgwaste\Mobs\Entities\AI\Bedrock;
 
 use tgwaste\Mobs\Main;
+use pocketmine\utils\Config;
 
 class Biomes {
 
@@ -12,11 +13,18 @@ class Biomes {
     private array $nightMobs;
 
     public function __construct() {
-        $config = Main::getInstance()->getConfig();
-        $biomes = $config->get("biomes", []);
+        $biomeConfig = new Config(
+            Main::getInstance()->getDataFolder() . "biome.yml",
+            Config::YAML
+        );
 
-        $this->dayMobs = $biomes["mobs"] ?? [];
-        $this->nightMobs = $biomes["night_mobs"] ?? [];
+        $biomes = $biomeConfig->get("biomes", []);
+
+        foreach ($biomes as $biomeName => $data) {
+            $upper = strtoupper($biomeName);
+            $this->dayMobs[$upper] = $data["day_mobs"] ?? [];
+            $this->nightMobs[$upper] = $data["night_mobs"] ?? [];
+        }
     }
 
     public function getMobsForBiome(string $biome): array {

@@ -1,5 +1,5 @@
-name: VanillaMobs
-version: 3.0.0-BETA
+name: SimpleVanillaMobs
+version: 1.0.0-BETA
 main: tgwaste\Mobs\Main
 api: 5.0.0
 author: [tgwaste, VsrStudio, ZabuzHere]

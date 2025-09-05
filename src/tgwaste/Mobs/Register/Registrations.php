@@ -110,8 +110,7 @@ class Registrations {
 			[$entityName]);
 
             $this->registerSpawnEgg($entityName, $typeClass);
-        }
-        CustomItems::register();
+		}
     }
     
     private function registerSpawnEgg(string $entityName, string $class) : void {

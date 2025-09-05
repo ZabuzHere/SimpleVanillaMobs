@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace tgwaste\Mobs\Register;
 
 use pocketmine\data\bedrock\item\ItemTypeNames;
-use pocketmine\data\bedrock\SavedItemData;
+use pocketmine\data\bedrock\item\SavedItemData;
 use pocketmine\item\ItemIdentifier;
 use pocketmine\item\ItemTypeIds;
 use pocketmine\item\StringToItemParser;

@@ -1,5 +1,7 @@
 # whether mobs spawn at all
 spawnmobs: true
+# beta version can cause a crash because it is still in the development stage
+betaversion: false
 # write spawn/despawn messages to the console
 # this is noisy and mostly for debugging
 spawnmsgs: false
@@ -14,37 +16,6 @@ nospawn:
 - lobby
 # quantity of mobs to spawn of each type (higher numbers will use a lot more system resources)
 # 3 mobs spawn by default per type, add a mob below to change the spawn quantity, use 0 for none
-#Biome Mobs Settings
-biomes:
-  mobs:
-    BIRCH FOREST: ["Cat", "Chicken", "Cow", "Horse", "Parrot", "Phantom", "Pig", "Rabbit", "Sheep"]
-    DESERT: ["Camel", "Cow", "Horse", "IronGolem", "Pig", "Rabbit", "Sheep"]
-    END: ["Enderman", "Warden", "EnderDragon"]
-    FOREST: ["Bat", "Cat", "Chicken", "Cow", "Horse", "Parrot", "Pig", "Rabbit", "Sheep"]
-    HELL: ["Blaze", "Ghast", "MagmaCube", "Mooshroom", "Piglin", "Slime"]
-    ICE PLAINS: ["PolarBear", "Stray", "SnowGolem"]
-    MOUNTAINS: ["Bat", "Cat", "Chicken", "Cow", "Horse", "Llama", "Parrot", "Pig", "Rabbit", "Sheep", "Goat"]
-    OCEAN: ["Cod", "Dolphin", "ElderGuardian", "PufferFish", "Salmon", "Squid", "TropicalFish"]
-    PLAINS: ["Cat", "Chicken", "Cow", "Donkey", "Horse", "Pig", "Rabbit", "Sheep", "Villager", "Fox", "Frog"]
-    RIVER: ["Cod", "PufferFish", "Salmon", "TropicalFish", "Axolotl", "GlowSquid"]
-    SMALL MOUNTAIN: ["Cat", "Chicken", "Cow", "Horse", "Llama", "Pig", "Rabbit", "Sheep", "Fox"]
-    SWAMP: ["Frog", "Slime", "Bat", "Cow", "Horse", "Pig", "Rabbit", "Sheep"]
-    TAIGA: ["Bat", "Cat", "Chicken", "Cow", "Horse", "Ocelot", "Pig", "Rabbit", "Sheep", "Fox"]
-
-  night_mobs:
-    BIRCH FOREST: ["CaveSpider", "Creeper", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"]
-    DESERT: ["Creeper", "Husk", "Skeleton", "SkeletonHorse", "Spider", "Stray", "Zombie", "Creaking"]
-    END: ["Enderman", "Creaking", "EnderDragon"]
-    FOREST: ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"]
-    HELL: ["Blaze", "Ghast", "MagmaCube", "Warden", "Piglin"]
-    ICE PLAINS: ["Stray", "Zombie"]
-    MOUNTAINS: ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"]
-    OCEAN: ["Drowned", "Guardian", "ElderGuardian"]
-    PLAINS: ["CaveSpider", "Creeper", "Enderman", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie", "Zombie_Villager"]
-    RIVER: ["Drowned", "GlowSquid"]
-    SMALL MOUNTAIN: ["CaveSpider", "Creeper", "Skeleton", "SkeletonHorse", "Spider", "Wolf", "Zombie"]
-    SWAMP: ["Slime", "Witch", "Zombie"]
-    TAIGA: ["CaveSpider", "SkeletonHorse", "Spider", "Stray", "Zombie", "Fox"]
 # available mobs are:
 # Bat Blaze Cat CaveSpider Chicken Cod Cow Creeper Dolphin Donkey ElderGuardian Enderman Ghast
 # Guardian Horse Husk IronGolem Llama MagmaCube Mooshroom Ocelot Parrot Phantom Pig PolarBear

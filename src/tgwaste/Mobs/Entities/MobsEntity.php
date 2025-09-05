@@ -12,7 +12,7 @@ use pocketmine\entity\EntitySizeInfo;
 use pocketmine\entity\Living;  
 use pocketmine\math\Vector3;  
 use pocketmine\nbt\tag\CompoundTag;
-// use pocketmine\item\ItemIds;
+use pocketmine\entity\object\ExperienceOrb;
 use pocketmine\item\ItemTypeIds;
 use pocketmine\item\Item;
 use pocketmine\item\VanillaItems;
@@ -270,45 +270,122 @@ class MobsEntity extends Living {
   
 	public function getDrops(): array {
 		$parser = LegacyStringToItemParser::getInstance();
-		
-		switch (static::TYPE_ID) {
-			case EntityIds::CHICKEN:
+    
+		switch (static::TYPE_ID) {       
+			case EntityIds::CHICKEN:   
 			return [
-				$parser->parse("raw_chicken"),
-				$parser->parse("feather")
-				];
-			case EntityIds::ZOMBIE:
-			return [
-				$parser->parse("rotten_flesh")->setCount(mt_rand(0, 2))
-				];
-			case EntityIds::FOX:
-			return [
-				$parser->parse("leather")->setCount(mt_rand(0, 1))
-				];
-			case EntityIds::FROG:
-			return [
-				$parser->parse("slime_ball")->setCount(mt_rand(0, 1))
-				];
-			case EntityIds::PHANTOM:
-			return [
-				$parser->parse("phantom_membrane")
-				];
-			default:
-			return parent::getDrops();
+                $parser->parse("raw_chicken")->setCount(mt_rand(0, 1)),
+                $parser->parse("feather")->setCount(mt_rand(0, 2))
+            ];
+
+        case EntityIds::COW:
+            return [
+                $parser->parse("raw_beef")->setCount(mt_rand(1, 3)),
+                $parser->parse("leather")->setCount(mt_rand(0, 2))
+            ];
+
+        case EntityIds::PIG:
+            return [
+                $parser->parse("raw_porkchop")->setCount(mt_rand(1, 3))
+            ];
+
+        case EntityIds::SHEEP:
+            return [
+                $parser->parse("mutton")->setCount(mt_rand(1, 2)),
+                $parser->parse("wool")->setCount(1)
+            ];
+
+        case EntityIds::ZOMBIE:
+            return [
+                $parser->parse("rotten_flesh")->setCount(mt_rand(0, 2))
+            ];
+
+        case EntityIds::SKELETON:
+            return [
+                $parser->parse("bone")->setCount(mt_rand(0, 2)),
+                $parser->parse("arrow")->setCount(mt_rand(0, 2))
+            ];
+
+        case EntityIds::CREEPER:
+            return [
+                $parser->parse("gunpowder")->setCount(mt_rand(0, 2))
+            ];
+
+        case EntityIds::SPIDER:
+            return [
+                $parser->parse("string")->setCount(mt_rand(0, 2)),
+                $parser->parse("spider_eye")->setCount(mt_rand(0, 1))
+            ];
+
+        case EntityIds::ENDERMAN:
+            return [
+                $parser->parse("ender_pearl")->setCount(mt_rand(0, 1))
+            ];
+
+        case EntityIds::PHANTOM:
+            return [
+                $parser->parse("phantom_membrane")->setCount(mt_rand(0, 1))
+            ];
+
+        case EntityIds::FROG:
+            return [
+                $parser->parse("slime_ball")->setCount(mt_rand(0, 1))
+            ];
+
+        case EntityIds::FOX:
+            return [
+                $parser->parse("leather")->setCount(mt_rand(0, 1))
+            ];
+
+        default:
+            return parent::getDrops();
 		}
-	}  
+	}
   
-	public function getXpDropAmount(): int {  
-		switch (static::TYPE_ID) {  
-			case EntityIds::CHICKEN:  
-			case EntityIds::FROG:  
-				return mt_rand(1, 3);  
-			case EntityIds::ZOMBIE:  
-			case EntityIds::FOX:  
-			case EntityIds::PHANTOM:  
-				return mt_rand(3, 5);  
-			default:  
-				return mt_rand(1, 2);  
-		}  
-	}  
+	public function getXpDropAmount(): int {
+    switch (static::TYPE_ID) {
+        case EntityIds::CHICKEN:
+        case EntityIds::FROG:
+            return mt_rand(1, 3);
+
+        case EntityIds::ZOMBIE:
+        case EntityIds::FOX:
+        case EntityIds::PHANTOM:
+        case EntityIds::CREEPER:
+        case EntityIds::SKELETON:
+        case EntityIds::SPIDER:
+        case EntityIds::ENDERMAN:
+            return mt_rand(3, 5);
+
+        case EntityIds::COW:
+        case EntityIds::PIG:
+        case EntityIds::SHEEP:
+            return mt_rand(1, 3);
+
+        default:
+            return mt_rand(1, 2);
+    }
+}
+
+public function onDeath(): void {
+    parent::onDeath();
+
+    $xp = $this->getXpDropAmount();
+    if ($xp > 0) {
+        $world = $this->getWorld();
+        $pos = $this->getPosition();
+
+        $orb = new ExperienceOrb($world, $pos, $xp);
+        $orb->spawnToAll();
+
+        $this->getWorld()->getScheduler()->scheduleDelayedTask(
+            new \pocketmine\scheduler\ClosureTask(function() use ($orb): void {
+                if (!$orb->isClosed()) {
+                    $orb->close();
+                }
+            }),
+            20 * 30 // 30 second
+        );
+    }
+}
 }

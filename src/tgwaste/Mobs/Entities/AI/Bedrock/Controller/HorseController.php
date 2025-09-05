@@ -42,7 +42,7 @@ class HorseController implements Listener {
 
             $vehicle->setMotion($vehicle->getMotion()->withComponents($x, $vehicle->getMotion()->y, $z));
 
-            $flags = $packet->getInputFlags()
+            $flags = $packet->getInputFlags();
             if($flags->get(PlayerAuthInputFlags::JUMPING)){
                 $motion = $vehicle->getMotion();
                 $vehicle->setMotion($motion->withComponents($motion->x, 0.5, $motion->z));
@@ -72,7 +72,7 @@ class HorseController implements Listener {
                     ])){
                         if($current === null){
                             $entity->setArmor($item);
-                            $player->getInventory()->setItemInHand($item->pop());
+                            $player->getInventory()->setItemInHand($item->pop()); // kurangi item di tangan
                         } else {
                             $entity->setArmor(null);
                             $player->getInventory()->addItem($current);

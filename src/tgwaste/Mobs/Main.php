@@ -17,6 +17,7 @@ use tgwaste\Mobs\Listener\FeedListener;
 use tgwaste\Mobs\Listener\HorseListener;
 use tgwaste\Mobs\Entities\AI\Bedrock\Controller\HorseController;
 use tgwaste\Mobs\Entities\AI\Bedrock\Controller\GhastController;
+use tgwaste\Mobs\Entities\AI\Bedrock\Inventory\TraderInventory;
 use tgwaste\Mobs\Entities\AI\Coords;
 use tgwaste\Mobs\Entities\AI\Motion;
 use tgwaste\Mobs\Entities\AI\Spawn;
@@ -25,6 +26,8 @@ use tgwaste\Mobs\Entities\AI\Bedrock\Listen;
 use tgwaste\Mobs\Entities\AI\Bedrock\GolemBuilder;
 use tgwaste\Mobs\Entities\AI\Bedrock\Schedule;
 use tgwaste\Mobs\Entities\AI\Bedrock\Attributes;
+use tgwaste\Mobs\Register\CustomItems;
+use tgwaste\Mobs\Register\CustomBlocks;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
@@ -51,6 +54,7 @@ class Main extends PluginBase implements Listener {
 		$this->coordsobj = (new Coords);
 
 		$this->saveDefaultConfig();
+		$this->saveResource("biome.yml");
 		$this->getScheduler()->scheduleRepeatingTask(new Schedule(), 200);
 		$this->getServer()->getPluginManager()->registerEvents(new Listen(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
@@ -59,6 +63,7 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents(new HorseListener(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new HorseController(), $this);
         $this->getServer()->getPluginManager()->registerEvents(new GhastController(), $this);
+		$this->getServer()->getPluginManager()->registerEvents(new TraderInventory(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new SoundAPI(), $this);
 
 		$this->damagetags = $this->getConfig()->get("damagetags");
@@ -68,6 +73,11 @@ class Main extends PluginBase implements Listener {
 		$this->spawnmsgs = $this->getConfig()->get("spawnmsgs");
 
 		(new Registrations)->registerEntities();
+		CustomItems::register();
+
+		if($this->getConfig()->get("betaversion", false)){
+        CustomBlocks::register();
+		}
 	}
 
 	public static function getInstance(): self {
