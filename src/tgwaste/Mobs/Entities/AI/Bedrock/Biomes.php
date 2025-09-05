@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace tgwaste\Mobs\Entities\AI\Bedrock;
 
 use tgwaste\Mobs\Main;
+use pocketmine\utils\Config;
 
 class Biomes {
 
