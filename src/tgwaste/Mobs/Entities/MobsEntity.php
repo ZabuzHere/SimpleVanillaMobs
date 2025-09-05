@@ -26,6 +26,9 @@ use pocketmine\network\mcpe\protocol\types\entity\EntityMetadataProperties;
 use tgwaste\Mobs\Entities\AI\Bedrock\Attributes;
 use tgwaste\Mobs\Main;  
 use tgwaste\Mobs\Entities\AI\Motion;
+use tgwaste\Mobs\Entities\AI\Bedrock\Utils\MobXp;
+use tgwaste\Mobs\Entities\AI\Bedrock\Utils\MobDrops;
+use pocketmine\scheduler\ClosureTask;
   
 class MobsEntity extends Living {  
 	const TYPE_ID = "";  
@@ -102,72 +105,72 @@ class MobsEntity extends Living {
 		$this->attackdelay = $attackdelay;  
 	}  
   
-	public function getAttackDelay() {  
-		return $this->attackdelay;  
-	}  
+	public function getAttackDelay() {
+		return $this->attackdelay;
+	}
   
-	public function damageTag() {  
-		$damagetags = Main::$instance->damagetags;  
-		$name = $this->getName();  
-		$health = $this->getHealth();  
-		$maxhealth = $this->getMaxHealth();  
-		$percent = (int)(($health * 100.0) / $maxhealth);  
+	public function damageTag() {
+		$damagetags = Main::$instance->damagetags;
+		$name = $this->getName();
+		$health = $this->getHealth();
+		$maxhealth = $this->getMaxHealth();
+		$percent = (int)(($health * 100.0) / $maxhealth);
   
 		if ($damagetags && $percent < 100) {  
-			$this->setNameTag("§c$name  $percent §r");  
-		} else {  
-			$damagetags = false;  
-			$this->setNameTag($this->getName());  
-		}  
+			$this->setNameTag("§c$name  $percent §r");
+		} else {
+			$damagetags = false;
+			$this->setNameTag($this->getName());
+		}
   
-		$this->setNameTagVisible($damagetags);  
-		$this->setNameTagAlwaysVisible($damagetags);  
-	}  
+		$this->setNameTagVisible($damagetags);
+		$this->setNameTagAlwaysVisible($damagetags);
+	}
   
-	public function knockBack(float $x, float $z, float $force = 0.4, ?float $verticalLimit = 0.4): void {  
-		if ($this->isHostile()) {  
-			$this->timer = 20;  
-			$this->setMovementSpeed(1.00);  
-		} else {  
-			$this->timer = 0;  
-			$this->setMovementSpeed(2.00);  
-		}  
-		$this->damageTag();  
-		parent::knockBack($x, $z, $force);  
-	}  
+	public function knockBack(float $x, float $z, float $force = 0.4, ?float $verticalLimit = 0.4): void {
+		if ($this->isHostile()) {
+			$this->timer = 20;
+			$this->setMovementSpeed(1.00);
+		} else {
+			$this->timer = 0;
+			$this->setMovementSpeed(2.00);
+		}
+		$this->damageTag();
+		parent::knockBack($x, $z, $force);
+	}
   
-	public function entityBaseTick(int $diff = 1) : bool {  
-		(new Motion)->tick($this);  
-		return parent::entityBaseTick($diff);  
-	}  
+	public function entityBaseTick(int $diff = 1) : bool { 
+		(new Motion)->tick($this);
+		return parent::entityBaseTick($diff);
+	}
   
-	public function mortalEnemy() : string {  
+	public function mortalEnemy() : string {
 		return (new Attributes)->getMortalEnemy($this->getName());  
 	}  
   
-	public function catchesFire() : bool {  
+	public function catchesFire() : bool {
 		return (new Attributes)->canCatchFire($this->getName());  
 	}  
   
-	public function isFlying() : bool {  
+	public function isFlying() : bool {
 		return (new Attributes)->isFlying($this->getName());  
 	}  
   
-	public function isJumping() : bool {  
+	public function isJumping() : bool {
 		return (new Attributes)->isJumping($this->getName());  
 	}  
   
-	public function isHostile() : bool {  
+	public function isHostile() : bool {
 		return (new Attributes)->isHostile($this->getName());  
-	}  
+	}
   
-	public function isNether() : bool {  
+	public function isNether() : bool {
 		return (new Attributes)->isNetherMob($this->getName());  
-	}  
+	}
   
-	public function isSnow() : bool {  
+	public function isSnow() : bool {
 		return (new Attributes)->isSnowMob($this->getName());  
-	}  
+	}
   
 	public function isSwimming() : bool {  
 		$swim = (new Attributes)->isSwimming($this->getName());  
@@ -212,14 +215,14 @@ class MobsEntity extends Living {
     $this->leashedTo = $player;
 
     if ($player !== null) {
-        // Tandai metadata LEASHED
+
         $this->setGenericFlag(EntityMetadataFlags::LEASHED, true);
         $this->setGenericProperty(EntityMetadataProperties::LEAD_HOLDER_EID, $player->getId());
 
         $link = new EntityLink(
             $player->getId(),
             $this->getId(),
-            EntityLink::TYPE_PASSENGER, // Bedrock juga menggunakan ini
+            EntityLink::TYPE_PASSENGER,
             true,
             false,
             0.0
@@ -232,7 +235,6 @@ class MobsEntity extends Living {
             $viewer->getNetworkSession()->sendDataPacket(clone $pk);
         }
     } else {
-        // Lepas tali
         $this->setGenericFlag(EntityMetadataFlags::LEASHED, false);
         $this->setGenericProperty(EntityMetadataProperties::LEAD_HOLDER_EID, 0);
 
@@ -268,124 +270,33 @@ class MobsEntity extends Living {
     return parent::onUpdate($currentTick);
     }
   
-	public function getDrops(): array {
-		$parser = LegacyStringToItemParser::getInstance();
-    
-		switch (static::TYPE_ID) {       
-			case EntityIds::CHICKEN:   
-			return [
-                $parser->parse("raw_chicken")->setCount(mt_rand(0, 1)),
-                $parser->parse("feather")->setCount(mt_rand(0, 2))
-            ];
-
-        case EntityIds::COW:
-            return [
-                $parser->parse("raw_beef")->setCount(mt_rand(1, 3)),
-                $parser->parse("leather")->setCount(mt_rand(0, 2))
-            ];
-
-        case EntityIds::PIG:
-            return [
-                $parser->parse("raw_porkchop")->setCount(mt_rand(1, 3))
-            ];
-
-        case EntityIds::SHEEP:
-            return [
-                $parser->parse("mutton")->setCount(mt_rand(1, 2)),
-                $parser->parse("wool")->setCount(1)
-            ];
-
-        case EntityIds::ZOMBIE:
-            return [
-                $parser->parse("rotten_flesh")->setCount(mt_rand(0, 2))
-            ];
-
-        case EntityIds::SKELETON:
-            return [
-                $parser->parse("bone")->setCount(mt_rand(0, 2)),
-                $parser->parse("arrow")->setCount(mt_rand(0, 2))
-            ];
-
-        case EntityIds::CREEPER:
-            return [
-                $parser->parse("gunpowder")->setCount(mt_rand(0, 2))
-            ];
-
-        case EntityIds::SPIDER:
-            return [
-                $parser->parse("string")->setCount(mt_rand(0, 2)),
-                $parser->parse("spider_eye")->setCount(mt_rand(0, 1))
-            ];
-
-        case EntityIds::ENDERMAN:
-            return [
-                $parser->parse("ender_pearl")->setCount(mt_rand(0, 1))
-            ];
-
-        case EntityIds::PHANTOM:
-            return [
-                $parser->parse("phantom_membrane")->setCount(mt_rand(0, 1))
-            ];
-
-        case EntityIds::FROG:
-            return [
-                $parser->parse("slime_ball")->setCount(mt_rand(0, 1))
-            ];
-
-        case EntityIds::FOX:
-            return [
-                $parser->parse("leather")->setCount(mt_rand(0, 1))
-            ];
-
-        default:
-            return parent::getDrops();
-		}
+	public function getDrops(): array {    
+		return MobDrops::getDrops(static::TYPE_ID);
 	}
-  
-	public function getXpDropAmount(): int {
-    switch (static::TYPE_ID) {
-        case EntityIds::CHICKEN:
-        case EntityIds::FROG:
-            return mt_rand(1, 3);
+	
+	public function getXpDropAmount(): int {    
+		return MobXp::getXp(static::TYPE_ID);
+	}
+	
+	public function onDeath(): void {
+		parent::onDeath();
+ 
+		$xp = $this->getXpDropAmount(); 
+		if ($xp > 0) {      
+			$world = $this->getWorld();      
+			$pos = $this->getPosition();
 
-        case EntityIds::ZOMBIE:
-        case EntityIds::FOX:
-        case EntityIds::PHANTOM:
-        case EntityIds::CREEPER:
-        case EntityIds::SKELETON:
-        case EntityIds::SPIDER:
-        case EntityIds::ENDERMAN:
-            return mt_rand(3, 5);
-
-        case EntityIds::COW:
-        case EntityIds::PIG:
-        case EntityIds::SHEEP:
-            return mt_rand(1, 3);
-
-        default:
-            return mt_rand(1, 2);
-    }
-}
-
-public function onDeath(): void {
-    parent::onDeath();
-
-    $xp = $this->getXpDropAmount();
-    if ($xp > 0) {
-        $world = $this->getWorld();
-        $pos = $this->getPosition();
-
-        $orb = new ExperienceOrb($world, $pos, $xp);
-        $orb->spawnToAll();
-
-        $this->getWorld()->getScheduler()->scheduleDelayedTask(
-            new \pocketmine\scheduler\ClosureTask(function() use ($orb): void {
-                if (!$orb->isClosed()) {
-                    $orb->close();
+			$orb = new ExperienceOrb($world, $pos, $xp);  
+			$orb->spawnToAll();
+      
+			$this->getWorld()->getScheduler()->scheduleDelayedTask(           
+				new ClosureTask(function() use ($orb): void {       
+					if (!$orb->isClosed()) {
+						$orb->close();
+					}
                 }
             }),
-            20 * 30 // 30 second
+            20 * 30 // 30 Second
         );
     }
-}
 }
