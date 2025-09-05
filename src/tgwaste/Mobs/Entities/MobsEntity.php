@@ -29,6 +29,7 @@ use tgwaste\Mobs\Entities\AI\Motion;
 use tgwaste\Mobs\Entities\AI\Bedrock\Utils\MobXp;
 use tgwaste\Mobs\Entities\AI\Bedrock\Utils\MobDrops;
 use pocketmine\scheduler\ClosureTask;
+use pocketmine\entity\Location;
   
 class MobsEntity extends Living {  
 	const TYPE_ID = "";  
@@ -279,22 +280,29 @@ class MobsEntity extends Living {
 	}
 	
 	public function onDeath(): void {
+    
 		parent::onDeath();
- 
-		$xp = $this->getXpDropAmount(); 
-		if ($xp > 0) {      
-			$world = $this->getWorld();      
+    
+		$xp = $this->getXpDropAmount();    
+		if ($xp > 0) {        
 			$pos = $this->getPosition();
-
-			$orb = new ExperienceOrb($world, $pos, $xp);  
-			$orb->spawnToAll();
       
-			$this->getWorld()->getScheduler()->scheduleDelayedTask(           
-				new ClosureTask(function() use ($orb): void {       
+			$loc = Location::fromObject(           
+				$pos,        
+				$this->getWorld(),
+				$this->yaw,        
+				$this->pitch   
+			);
+      
+			$orb = new ExperienceOrb($loc, $xp);   
+			$orb->spawnToAll();
+     
+			$this->getWorld()->getScheduler()->scheduleDelayedTask(    
+				new ClosureTask(function() use ($orb): void {  
 					if (!$orb->isClosed()) {
 						$orb->close();
 					}
-                }
+				}
             }),
             20 * 30 // 30 Second
         );
