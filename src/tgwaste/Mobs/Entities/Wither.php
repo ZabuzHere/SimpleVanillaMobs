@@ -14,7 +14,7 @@ use pocketmine\network\mcpe\protocol\types\BossBarColor;
 use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 use pocketmine\nbt\tag\CompoundTag;
 
-class Wither extends Living {
+class Wither extends MobsEntity {
     public const NETWORK_ID = EntityIds::WITHER;
 
     private const BOSSBAR_RANGE_HORIZONTAL = 96.0;
