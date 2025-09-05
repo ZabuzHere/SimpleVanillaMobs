@@ -27,7 +27,7 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 - [X] Added New Mobs Total All Mobs 73+
 - [X] Ride Horse And HappyGhast
 - [X] Equip Armor Horse And HappyGhast
-- [X] Support Drops Xp And Item
+- [X] Support Drops XP and Items Doesn't Burden the Server
 - [X] Can Feed And Bond Mobs Like In Vanilla
 - [X] Adding Can Use Shears Like In Vanilla
 - [X] Can Make Golem From Blocks Like In Vanilla (Snow, Iron, Wither)
