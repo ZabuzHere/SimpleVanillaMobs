@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 namespace tgwaste\Mobs\Entities\AI\Bedrock\Utils;
+
 use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
 
 final class MobXp {
