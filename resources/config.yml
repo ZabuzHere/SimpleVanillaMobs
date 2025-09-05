@@ -1,5 +1,7 @@
 # whether mobs spawn at all
 spawnmobs: true
+# beta version can cause a crash because it is still in the development stage
+betaversion: false
 # write spawn/despawn messages to the console
 # this is noisy and mostly for debugging
 spawnmsgs: false
