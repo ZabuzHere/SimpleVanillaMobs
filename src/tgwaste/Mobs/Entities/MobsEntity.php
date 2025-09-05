@@ -388,3 +388,4 @@ public function onDeath(): void {
         );
     }
 }
+}
