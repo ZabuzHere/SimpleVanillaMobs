@@ -297,14 +297,14 @@ class MobsEntity extends Living {
 			$orb = new ExperienceOrb($loc, $xp);   
 			$orb->spawnToAll();
      
-			$this->getWorld()->getScheduler()->scheduleDelayedTask(    
-				new ClosureTask(function() use ($orb): void {  
-					if (!$orb->isClosed()) {
-						$orb->close();
-                    }         
-                }),      
-                20 * 30 // 30 Second      
-            );  
+			Main::getInstance()->getScheduler()->scheduleDelayedTask(           
+                new ClosureTask(function() use ($orb): void {              
+                    if (!$orb->isClosed()) {                  
+                        $orb->close(); 
+                    }           
+                }),         
+                600      
+            );    
         }
     }
 }
