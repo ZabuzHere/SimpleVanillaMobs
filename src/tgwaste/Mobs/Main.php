@@ -52,6 +52,7 @@ class Main extends PluginBase implements Listener {
 		$this->coordsobj = (new Coords);
 
 		$this->saveDefaultConfig();
+		$this->saveResource("biome.yml");
 		$this->getScheduler()->scheduleRepeatingTask(new Schedule(), 200);
 		$this->getServer()->getPluginManager()->registerEvents(new Listen(), $this);
 		$this->getServer()->getPluginManager()->registerEvents(new GolemBuilder(), $this);
