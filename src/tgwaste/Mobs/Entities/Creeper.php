@@ -23,7 +23,7 @@ class Creeper extends MobsEntity {
 
     private int $explosionTimer = 0;
     private bool $isExploding = false;
-    private int $fuseTime = 40; // 2 detik
+    private int $fuseTime = 40;
     private float $detectionRadius = 6.0;
     private float $chaseSpeed = 0.25;
     private float $explosionRadius = 3.0;
@@ -40,11 +40,13 @@ class Creeper extends MobsEntity {
         $hasUpdate = parent::entityBaseTick($tickDiff);
         if (!$this->isAlive()) return $hasUpdate;
 
-        // Find the nearest player
         $nearestPlayer = null;
         $minDistance = $this->detectionRadius;
         foreach ($this->getWorld()->getNearbyEntities($this->getBoundingBox()->expandedCopy($this->detectionRadius, $this->detectionRadius, $this->detectionRadius), $this) as $entity) {
             if ($entity instanceof Player) {
+                if ($entity->isCreative() || $entity->isSpectator() || $entity->hasPermission("pocketmine.creative")) {        
+                    continue;
+                }
                 $dist = $this->getPosition()->distance($entity->getPosition());
                 if ($dist < $minDistance) {
                     $nearestPlayer = $entity;
@@ -53,30 +55,31 @@ class Creeper extends MobsEntity {
             }
         }
 
+        //if ($nearestPlayer !== null && !$this->isExploding) {
+            //$this->startExplosion();
+        //}
+        
         if ($nearestPlayer !== null && !$this->isExploding) {
-            $this->startExplosion();
+            if (!($nearestPlayer->isCreative() || $nearestPlayer->isSpectator())) {       
+                $this->startExplosion();   
+            }
         }
 
-        // Fuse ticking & chasing
         if ($this->isExploding) {
             $this->explosionTimer += $tickDiff;
 
-            // Set flags untuk klien
             $this->getNetworkProperties()->setGenericFlag(EntityMetadataFlags::IGNITED, true);
             $this->getNetworkProperties()->setGenericFlag(EntityMetadataFlags::EATING, true);
 
-            // Update Fuse Length
             $this->getNetworkProperties()->setInt(EntityMetadataProperties::FUSE_LENGTH, max(0, $this->fuseTime - $this->explosionTimer));
 
             $this->getWorld()->addParticle($this->getPosition()->add(0, 0.5, 0), new SmokeParticle());
 
-            // Chase player
             if ($nearestPlayer !== null) {
                 $direction = $nearestPlayer->getPosition()->subtractVector($this->getPosition())->normalize();
                 $this->setMotion($direction->multiply($this->chaseSpeed));
             }
 
-            // Ledakan when fuse habis
             if ($this->explosionTimer >= $this->fuseTime) {
                 $this->explode();
             }
@@ -94,12 +97,15 @@ class Creeper extends MobsEntity {
         $pos = $this->getPosition();
         $world = $this->getWorld();
 
-        // Particle & sound
         $world->addParticle($pos, new HugeExplodeParticle());
         $world->addSound($pos, new ExplodeSound());
 
-        // Damage entities
         foreach ($world->getNearbyEntities($this->getBoundingBox()->expandedCopy($this->explosionRadius, $this->explosionRadius, $this->explosionRadius), $this) as $entity) {
+            if ($entity instanceof Player) {      
+                if ($entity->isCreative() || $entity->isSpectator()) {          
+                    continue;       
+                } 
+            }
             if ($entity instanceof Living) {
                 $distance = $pos->distance($entity->getPosition());
                 $damage = max(0, 10 * (1 - $distance / $this->explosionRadius));
@@ -107,7 +113,6 @@ class Creeper extends MobsEntity {
             }
         }
 
-        // Destroy blocks in the blast radius
         $center = $pos->floor();
         $radius = (int) $this->explosionRadius;
         for ($x = -$radius; $x <= $radius; $x++) {
