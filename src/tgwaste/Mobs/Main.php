@@ -26,6 +26,8 @@ use tgwaste\Mobs\Entities\AI\Bedrock\Listen;
 use tgwaste\Mobs\Entities\AI\Bedrock\GolemBuilder;
 use tgwaste\Mobs\Entities\AI\Bedrock\Schedule;
 use tgwaste\Mobs\Entities\AI\Bedrock\Attributes;
+use tgwaste\Mobs\Register\CustomItems;
+use tgwaste\Mobs\Register\CustomBlocks;
 
 class Main extends PluginBase implements Listener {
 	public static $instance;
