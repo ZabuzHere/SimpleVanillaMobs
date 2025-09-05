@@ -12,6 +12,7 @@ use pocketmine\player\Player;
 use pocketmine\network\mcpe\protocol\BossEventPacket;
 use pocketmine\network\mcpe\protocol\types\BossBarColor;
 use pocketmine\network\mcpe\protocol\types\entity\EntityIds;
+use pocketmine\nbt\tag\CompoundTag;
 
 class Wither extends Living {
     public const NETWORK_ID = EntityIds::WITHER;
@@ -19,7 +20,6 @@ class Wither extends Living {
     private const BOSSBAR_RANGE_HORIZONTAL = 96.0;
     private const BOSSBAR_RANGE_VERTICAL   = 64.0;
 
-    /** Track which players have seen the bossbar */
     private array $bossBarVisible = [];
 
     protected float $scale = 1.0;
@@ -40,8 +40,8 @@ class Wither extends Living {
         return 300;
     }
 
-    public function initEntity(Location $location) : void{
-        parent::initEntity($location);
+    public function initEntity(CompoundTag $nbt) : void{
+        parent::initEntity($nbt);
         $this->setHealth($this->getMaxHealth());
     }
 
@@ -75,6 +75,7 @@ class Wither extends Living {
             $this->getId(),
             $this->getName(),
             $this->getHealth() / $this->getMaxHealth(),
+            true,
             BossBarColor::PURPLE,
             0
         );
