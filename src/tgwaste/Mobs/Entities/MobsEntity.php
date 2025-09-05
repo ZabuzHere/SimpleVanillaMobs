@@ -301,10 +301,10 @@ class MobsEntity extends Living {
 				new ClosureTask(function() use ($orb): void {  
 					if (!$orb->isClosed()) {
 						$orb->close();
-					}
-				}
-            }),
-            20 * 30 // 30 Second
-        );
+                    }         
+                }),      
+                20 * 30 // 30 Second      
+            );  
+        }
     }
 }
