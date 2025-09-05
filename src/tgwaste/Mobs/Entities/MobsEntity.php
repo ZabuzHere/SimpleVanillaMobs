@@ -282,17 +282,19 @@ class MobsEntity extends Living {
 	public function onDeath(): void {
     
 		parent::onDeath();
-    
-		$xp = $this->getXpDropAmount();    
-		if ($xp > 0) {        
-			$pos = $this->getPosition();
-      
-			$loc = Location::fromObject(           
-				$pos,        
-				$this->getWorld(),
-				$this->yaw,        
-				$this->pitch   
-			);
+        
+        $xp = $this->getXpDropAmount();   
+        if ($xp > 0) {        
+            $pos = $this->getPosition();  
+            $loc = new Location( 
+                $pos->x,            
+                $pos->y,            
+                $pos->z,          
+                $this->getWorld(),     
+                $this->getLocation()->getYaw(),           
+                $this->getLocation()->getPitch()
+        
+            );
       
 			$orb = new ExperienceOrb($loc, $xp);   
 			$orb->spawnToAll();
@@ -308,3 +310,4 @@ class MobsEntity extends Living {
         }
     }
 }
+
