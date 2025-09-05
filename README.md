@@ -2,7 +2,7 @@
 <b>Mob Plugin For PocketMine-MP Version 5<b>
 <br />
 <br />
-<img src="https://raw.githubusercontent.com/ZabuzHere/SimpleVanillaMobs/v1.0.0/icon.gif" height=200 width=150>
+<img src="https://github.com/ZabuzHere/SimpleVanillaMobs/blob/main/icon.gif" height=200 width=150>
 <br />
 ## About
 This is a very generic plugin that will add Mobs to your PM5 worlds.
