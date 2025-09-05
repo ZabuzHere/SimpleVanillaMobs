@@ -22,7 +22,7 @@ This is a very generic plugin that will add Mobs to your PM5 worlds.
 - [X] All Mobs Egg
 - [X] Trader & Horse Inventory
 - [X] Dried Ghast Vanilla
-- [X] Biome Mobs Settings Config
+- [X] Biome Mobs Settings Config and Beta Mode
 - [X] Updated Some Mobs Like Vanilla
 - [X] Added New Mobs Total All Mobs 73+
 - [X] Ride Horse And HappyGhast
